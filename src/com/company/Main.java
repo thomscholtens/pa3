@@ -10,16 +10,19 @@ import java.util.Map;
 public class Main {
 
     public static void main(String[] args) {
-        new GUI();
+//        new GUI();
 
         Rsa rsa = new Rsa(323);
         rsa.calculatePandQ();
         rsa.calculatePhi();
         rsa.generateE();
+        String Text = "jaja we doen het gewoon";
+
         ArrayList<Integer> message = new ArrayList();
-        message.add(104);
-        message.add(111);
-        message.add(105);
+        for (int i = 0; i < Text.length(); i++) {
+            message.add( (int) Text.charAt(i));
+
+        }
         rsa.encryptMessage(message);
 
         System.out.println("n = "+ rsa.n);
