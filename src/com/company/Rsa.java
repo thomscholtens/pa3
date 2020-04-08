@@ -21,7 +21,6 @@ public class Rsa {
     public int d;
     public String decryptMessage;
     public ArrayList<Integer> encryptMessage;
-    public ArrayList<Integer> c;
 
     Rsa(int n) {
         this.n = n;
@@ -79,7 +78,7 @@ public class Rsa {
     }
 
     public void generateE() {
-        BigInteger e = BigInteger.valueOf(0);
+        BigInteger e;
         Random random = new Random();
         do {
             e = BigInteger.valueOf(random.nextInt(1000000));
@@ -129,17 +128,4 @@ public class Rsa {
         this.d = e.modInverse(BigInteger.valueOf(this.phi)).intValue();
     }
 
-    @Override
-    public String toString() {
-        return "Rsa{" +
-                "isValid=" + isValid +
-                ", time=" + time +
-                ", p=" + p +
-                ", q=" + q +
-                ", phi=" + phi +
-                ", e=" + e +
-                ", n=" + n +
-                ", c=" + c +
-                '}';
-    }
 }
