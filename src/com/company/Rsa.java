@@ -19,17 +19,17 @@ public class Rsa {
     public int e;
     public int n;
     public int d;
-    public ArrayList<Integer> decryptMessage;
+    public String decryptMessage;
     public ArrayList<Integer> encryptMessage;
     public ArrayList<Integer> c;
 
     Rsa(int n) {
-        this.n  = n;
+        this.n = n;
     }
 
-    public static int calculateNextPrime(int input){
+    public static int calculateNextPrime(int input) {
         int number = input + 1;
-        while(!isPrime(number)){
+        while (!isPrime(number)) {
             number++;
         }
 
@@ -38,8 +38,8 @@ public class Rsa {
 
     private static boolean isPrime(int number) {
         boolean flag = false;
-        for(int i = 2; i <= number/2; ++i) {
-            if(number % i == 0) {
+        for (int i = 2; i <= number / 2; ++i) {
+            if (number % i == 0) {
                 flag = true;
                 break;
             }
@@ -52,11 +52,11 @@ public class Rsa {
         int p = 1;
 
         // while p <= n else INVALID
-        while(p <= this.n){
+        while (p <= this.n) {
             int q = 1;
             // while q <= n check if p * q = n else nextprime(q)
-            while(q <= n) {
-                if (p * q == n){
+            while (q <= n) {
+                if (p * q == n) {
                     this.p = p;
                     this.q = q;
                     this.isValid = true;
@@ -65,7 +65,7 @@ public class Rsa {
                 q = Rsa.calculateNextPrime(q);
             }
 
-            if(this.isValid) break;
+            if (this.isValid) break;
             else p = Rsa.calculateNextPrime(p);
         }
 
@@ -83,38 +83,50 @@ public class Rsa {
         Random random = new Random();
         do {
             e = BigInteger.valueOf(random.nextInt(1000000));
-        } while (e.intValue() == 1 || e.intValue() > this.phi || !isPrime(e.intValue()) || e.gcd(BigInteger.valueOf(this.phi)).compareTo(ONE) != 0);
+        }
+        while (e.intValue() == 1 || e.intValue() > this.phi || !isPrime(e.intValue()) || e.gcd(BigInteger.valueOf(this.phi)).compareTo(ONE) != 0);
 
         this.e = e.intValue();
     }
 
-    public void encryptMessage(ArrayList<Integer> message) {
+    public void encryptMessage(String Text) {
+        ArrayList<Integer> message = new ArrayList();
+
+        for (int i = 0; i < Text.length(); i++) {
+            message.add((int) Text.charAt(i));
+
+        }
         BigInteger c;
         ArrayList<Integer> encrypted = new ArrayList<>();
-        for(int i = 0; i < message.size(); i++) {
+        for (int i = 0; i < message.size(); i++) {
             c = BigInteger.valueOf(message.get(i));
             c = c.pow(this.e).mod(BigInteger.valueOf(this.n));
             encrypted.add(c.intValue());
         }
 
-       this.encryptMessage = encrypted;
+        this.encryptMessage = encrypted;
     }
- public void decryptMessage(ArrayList<Integer> message) {
+
+    public void decryptMessage(ArrayList<Integer> message) {
         BigInteger c;
 
         ArrayList<Integer> decrypted = new ArrayList<>();
-        for(int i = 0; i < message.size(); i++) {
+        for (int i = 0; i < message.size(); i++) {
             c = BigInteger.valueOf(message.get(i));
             c = c.pow(this.d).mod(BigInteger.valueOf(this.n));
             decrypted.add(c.intValue());
         }
-
-        this.decryptMessage=  decrypted;
+        StringBuilder decryptmessage = new StringBuilder();
+        for (int i = 0; i < decrypted.size(); i++) {
+            String s = Character.toString((char) (int) decrypted.get(i));
+            decryptmessage.append(s);
+        }
+        this.decryptMessage = decryptmessage.toString();
     }
 
-    public void calculateD(){
+    public void calculateD() {
         BigInteger e = BigInteger.valueOf(this.e);
-        this.d =   e.modInverse(BigInteger.valueOf(this.phi)).intValue();
+        this.d = e.modInverse(BigInteger.valueOf(this.phi)).intValue();
     }
 
     @Override
