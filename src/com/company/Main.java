@@ -16,6 +16,7 @@ public class Main {
         rsa.calculatePandQ();
         rsa.calculatePhi();
         rsa.generateE();
+        rsa.calculateD();
         String Text = "jaja we doen het gewoon";
 
         ArrayList<Integer> message = new ArrayList();
@@ -25,6 +26,8 @@ public class Main {
         }
         rsa.encryptMessage(message);
 
+        rsa.decryptMessage(rsa.encryptMessage);
+
         System.out.println("n = "+ rsa.n);
         System.out.println("p = "+ rsa.p);
         System.out.println("q = "+ rsa.q);
@@ -32,7 +35,18 @@ public class Main {
         System.out.println("phi = "+ rsa.phi);
         System.out.println("e = "+ rsa.e);
         System.out.println("message = " + message);
-        System.out.println("encrypted message = " + rsa.encryptMessage(message));
+        System.out.println("encrypted message = " + rsa.encryptMessage);
+        System.out.println("d " + rsa.d);
+        System.out.println("decrypt " + rsa.decryptMessage );
+
+        StringBuilder decryptmessage = new StringBuilder();
+
+        for (int i = 0; i < rsa.decryptMessage.size(); i++) {
+            String s = Character.toString((char)(int)rsa.decryptMessage.get(i));
+            decryptmessage.append(s);
+        }
+        System.out.println("decrypt m " + decryptmessage );
+
 
     }
 

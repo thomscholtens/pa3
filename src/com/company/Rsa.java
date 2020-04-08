@@ -18,6 +18,9 @@ public class Rsa {
     public int phi;
     public int e;
     public int n;
+    public int d;
+    public ArrayList<Integer> decryptMessage;
+    public ArrayList<Integer> encryptMessage;
     public ArrayList<Integer> c;
 
     Rsa(int n) {
@@ -85,7 +88,7 @@ public class Rsa {
         this.e = e.intValue();
     }
 
-    public ArrayList<Integer> encryptMessage(ArrayList<Integer> message) {
+    public void encryptMessage(ArrayList<Integer> message) {
         BigInteger c;
         ArrayList<Integer> encrypted = new ArrayList<>();
         for(int i = 0; i < message.size(); i++) {
@@ -94,7 +97,24 @@ public class Rsa {
             encrypted.add(c.intValue());
         }
 
-        return encrypted;
+       this.encryptMessage = encrypted;
+    }
+ public void decryptMessage(ArrayList<Integer> message) {
+        BigInteger c;
+
+        ArrayList<Integer> decrypted = new ArrayList<>();
+        for(int i = 0; i < message.size(); i++) {
+            c = BigInteger.valueOf(message.get(i));
+            c = c.pow(this.d).mod(BigInteger.valueOf(this.n));
+            decrypted.add(c.intValue());
+        }
+
+        this.decryptMessage=  decrypted;
+    }
+
+    public void calculateD(){
+        BigInteger e = BigInteger.valueOf(this.e);
+        this.d =   e.modInverse(BigInteger.valueOf(this.phi)).intValue();
     }
 
     @Override
