@@ -11,7 +11,6 @@ import java.util.Random;
 public class Rsa {
 
     private static final BigInteger ONE = BigInteger.ONE;
-    public boolean isValid = false;
     public long time;
     public int p;
     public int q;
@@ -35,41 +34,36 @@ public class Rsa {
         return number;
     }
 
-    private static boolean isPrime(int number) {
-        boolean flag = false;
-        for (int i = 2; i <= number / 2; ++i) {
-            if (number % i == 0) {
-                flag = true;
-                break;
-            }
+    private static boolean isPrime(int n) {
+        if (n%2==0) return false;
+        //if not, then just check the odds
+        for(int i=3;i*i<=n;i+=2) {
+            if(n%i==0)
+                return false;
         }
-        return !flag;
+        return true;
     }
 
     public void calculatePandQ() {
         long startTime = System.currentTimeMillis();
         int p = 1;
-
-        // while p <= n else INVALID
         while (p <= this.n) {
             int q = 1;
-            // while q <= n check if p * q = n else nextprime(q)
             while (q <= n) {
-                if (p * q == n) {
+                if (n / p == q && n % p == 0) {
                     this.p = p;
                     this.q = q;
-                    this.isValid = true;
                     break;
                 }
                 q = Rsa.calculateNextPrime(q);
             }
-
-            if (this.isValid) break;
-            else p = Rsa.calculateNextPrime(p);
+            if (n / p == q) {
+                break;
+            } else {
+                p = Rsa.calculateNextPrime(p);
+            }
         }
-
-        long endTime = System.currentTimeMillis();
-        this.time = endTime - startTime;
+        this.time = System.currentTimeMillis() - startTime;
     }
 
     public void calculatePhi() {
