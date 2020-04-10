@@ -35,10 +35,10 @@ public class Rsa {
     }
 
     private static boolean isPrime(int n) {
-        if (n%2==0) return false;
+        if (n % 2 == 0) return false;
         //if not, then just check the odds
-        for(int i=3;i*i<=n;i+=2) {
-            if(n%i==0)
+        for (int i = 3; i * i <= n; i += 2) {
+            if (n % i == 0)
                 return false;
         }
         return true;
@@ -46,15 +46,19 @@ public class Rsa {
 
     public void calculatePandQ() {
         long startTime = System.currentTimeMillis();
-        int p = 1;
+        int p = 2;
         while (p <= this.n) {
-            int q = 1;
+            int q = 2;
             while (q <= n) {
-                if (n / p == q && n % p == 0) {
+                if (n / q == p && n % p == 0) {
                     this.p = p;
                     this.q = q;
                     break;
                 }
+                if (n / q < p) {
+                    break;
+                }
+
                 q = Rsa.calculateNextPrime(q);
             }
             if (n / p == q) {
