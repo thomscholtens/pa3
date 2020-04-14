@@ -50,7 +50,7 @@ public class Rsa {
         while (p <= this.n) {
             int q = 2;
             while (q <= n) {
-                if (n / q == p && n % p == 0) {
+                if (n / q == p && n % q == 0) {
                     this.p = p;
                     this.q = q;
                     break;
